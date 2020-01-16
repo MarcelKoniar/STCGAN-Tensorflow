@@ -3,6 +3,7 @@ from PIL import Image
 import cv2
 import numpy as np
 import tensorflow.nn as nn
+import os
 
 def deconv2d(input_, output_shape, k_h=5, k_w=5, d_h=2, d_w=2, name="deconv2d", stddev=0.02, with_w=False):
     with tf.variable_scope(name):
@@ -89,4 +90,31 @@ def img_frombytes(data):
     size = data.shape[::-1]
     databytes = np.packbits(data, axis=1)
     return Image.frombytes(mode='1', size=size, data=databytes)
-#
+
+def decode_image(img,resize=False,sz=(640,480)):
+    imw,imh = sz
+    img = np.squeeze(np.minimum(np.maximum(img,0.0),1.0))
+    if resize:
+        img = resize_to_test(img,sz=(imw,imh))
+    img = np.uint8(img*255.0)
+    if len(img.shape) ==2:
+        return np.repeat(np.expand_dims(img,axis=2),3,axis=2)
+    else:
+        return img
+
+
+def load(saver, checkpoint_dir,sess):
+    import re
+    print(" [*] Reading checkpoints...")
+    checkpoint_dir = os.path.join("./backup/")
+
+    ckpt = tf.train.get_checkpoint_state('./backup/')
+    if ckpt and ckpt.model_checkpoint_path:
+       ckpt_name = os.path.basename(ckpt.model_checkpoint_path)
+       saver.restore(sess, os.path.join(checkpoint_dir, ckpt_name))
+       counter = int(next(re.finditer("(\d+)(?!.*\d)",ckpt_name)).group(0))
+       print(" [*] Success to read {}".format(ckpt_name))
+       return True, counter
+    else:
+       print(" [*] Failed to find a checkpoint")
+       return False, 0

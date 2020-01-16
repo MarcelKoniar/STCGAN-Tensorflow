@@ -11,7 +11,7 @@ class ST_CGAN:
     def __init__(self,x,gt_mask):
         self.G1=self.generator_1(x);
 
-
+        
         sess=tf.Session()
         with tf.variable_scope('G1'):
             print('gt_mask shape')

@@ -89,3 +89,4 @@ def img_frombytes(data):
     size = data.shape[::-1]
     databytes = np.packbits(data, axis=1)
     return Image.frombytes(mode='1', size=size, data=databytes)
+#

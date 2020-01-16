@@ -126,7 +126,7 @@ def read_from_tfrecord_triple_img(reader, filenames):
     shadow_mask = tf.reshape(shadow_mask, [IMAGE_SIZE, IMAGE_SIZE,1])#1
     shadow_free = tf.reshape(shadow_free, [IMAGE_SIZE, IMAGE_SIZE,3])
     return shadow, shadow_mask,shadow_free
-
+#
 def read_tfrecord_triple_img(reader, tfrecord_file,vis):
     shadow,shadow_mask,shadow_free = read_from_tfrecord_triple_img(reader, [tfrecord_file])
     if vis:

@@ -49,7 +49,7 @@ def train(backupFlag):
         lr = tf.placeholder(tf.float32, name ='learn_rate_as')
     # init network model
     model = ST_CGAN(shadow,shadow_mask)
-
+    #
     #with tf.Session() as sess:
 
     #    ## ==================== for tensorflow debugger ========================= ##
